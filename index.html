@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>父亲节快乐 - 老爸</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="hearts-canvas"></canvas>
+  <header>
+    <h1>父亲节快乐！</h1>
+    <nav>
+      <a href="#" class="active">首页</a>
+    </nav>
+  </header>
+  <main>
+    <!-- 轮播图 -->
+    <section class="carousel-section">
+      <div class="carousel">
+        <button class="carousel-btn left" onclick="prevPhoto()">&#8592;</button>
+        <img id="carousel-img" src="1.jpg" alt="合影轮播" class="carousel-img">
+        <button class="carousel-btn right" onclick="nextPhoto()">&#8594;</button>
+      </div>
+      <div class="carousel-indicator" id="carousel-indicator"></div>
+    </section>
+    <!-- 父亲节倒计时 -->
+    <section class="countdown-section">
+      <div id="countdown"></div>
+    </section>
+    <!-- 插画和祝福语 -->
+    <div id="ecard-area">
+      <img src="dad.png" alt="父亲节插画" class="main-img">
+      <h2>致老爸：</h2>
+      <div class="blessing-box">
+        <p id="blessing" class="blessing"></p>
+        <div class="blessing-from">——王琪皓祝</div>
+        <button onclick="nextBlessing()">换一句祝福</button>
+      </div>
+    </div>
+    <!-- 留言区 -->
+    <section class="message-section">
+      <h3>给老爸留言</h3>
+      <form id="messageForm" onsubmit="return addMessage()">
+        <input type="text" id="messageInput" placeholder="写下你的祝福..." maxlength="50" required>
+        <button type="submit">发送</button>
+      </form>
+      <ul id="messageList"></ul>
+    </section>
+    <!-- 电子贺卡和彩蛋功能区 -->
+    <section class="extra-section">
+      <button id="card-btn" type="button" onclick="generateCard()">生成电子贺卡</button>
+      <button id="egg-btn" type="button" onclick="showEgg()">点我有彩蛋</button>
+    </section>
+  </main>
+  <!-- 背景音乐和主题切换按钮 -->
+  <div class="top-right-tools">
+    <button id="music-btn" onclick="toggleMusic()" title="播放/暂停音乐">🎵</button>
+    <button id="theme-btn" onclick="toggleTheme()" title="切换主题">🌙</button>
+  </div>
+  <footer>
+    <small>爱你的孩子敬上 | 2025</small>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html> 
