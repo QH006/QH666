@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>父亲节电子贺卡</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'PingFang SC', Arial, sans-serif;
+      background: linear-gradient(135deg, #fff7f7 0%, #ffe6e6 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      padding-top: 8vh;
+    }
+    .ecard-container {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 4px 32px rgba(226,85,85,0.13);
+      padding: 2.2rem 1.5rem 2rem 1.5rem;
+      max-width: 350px;
+      width: 90vw;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .ecard-img {
+      width: 180px;
+      border-radius: 16px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 12px rgba(226,85,85,0.10);
+    }
+    .ecard-blessing {
+      font-size: 1.15rem;
+      color: #e25555;
+      margin-bottom: 1.2rem;
+      background: #fff7f7;
+      border-radius: 10px;
+      padding: 1rem 0.5rem;
+      box-shadow: 0 1px 6px rgba(226,85,85,0.06);
+    }
+    .ecard-from {
+      color: #888;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      text-align: right;
+    }
+    .ribbon {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-8deg);
+      background: linear-gradient(90deg, #ffb6b6, #ffe6e6, #ffb6b6);
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 0.4rem 2.2rem;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(226,85,85,0.10);
+      letter-spacing: 2px;
+      font-weight: bold;
+      z-index: 2;
+      border: 2px solid #fff0f0;
+    }
+    .balloon {
+      position: absolute;
+      width: 38px;
+      height: 54px;
+      z-index: 0;
+      animation: floatUp 6s linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); opacity: 0.7; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-60px) scale(1.1); opacity: 0; }
+    }
+    @media (max-width: 500px) {
+      .ecard-container { padding: 1.2rem 0.2rem 1.2rem 0.2rem; }
+      .ecard-img { width: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="hearts-canvas"></canvas>
+  <div class="ecard-container">
+    <div class="ribbon">父亲节快乐</div>
+    <img src="dad.png" alt="父亲节插画" class="ecard-img">
+    <div class="ecard-blessing" id="ecard-blessing"></div>
+    <div class="ecard-from">——王琪皓祝</div>
+  </div>
+  <script>
+    // 动态爱心飘落
+    const canvas = document.getElementById('hearts-canvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    let hearts = [];
+    function randomHeart() {
+      return {
+        x: Math.random() * canvas.width,
+        y: -20,
+        size: 16 + Math.random() * 16,
+        speed: 1 + Math.random() * 2,
+        alpha: 0.7 + Math.random() * 0.3,
+        swing: Math.random() * 2 * Math.PI,
+        swingSpeed: 0.01 + Math.random() * 0.02
+      };
+    }
+    function drawHeart(x, y, size, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.moveTo(x, y + size / 4);
+      ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + size / 4);
+      ctx.bezierCurveTo(x - size / 2, y + size / 2, x, y + size * 0.8, x, y + size);
+      ctx.bezierCurveTo(x, y + size * 0.8, x + size / 2, y + size / 2, x + size / 2, y + size / 4);
+      ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + size / 4);
+      ctx.fillStyle = '#e25555';
+      ctx.fill();
+      ctx.restore();
+    }
+    function animateHearts() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (hearts.length < 30 && Math.random() < 0.3) {
+        hearts.push(randomHeart());
+      }
+      for (let i = 0; i < hearts.length; i++) {
+        let h = hearts[i];
+        h.y += h.speed;
+        h.x += Math.sin(h.swing) * 0.8;
+        h.swing += h.swingSpeed;
+        drawHeart(h.x, h.y, h.size, h.alpha);
+      }
+      hearts = hearts.filter(h => h.y < canvas.height + 30);
+      requestAnimationFrame(animateHearts);
+    }
+    animateHearts();
+    // 气球动画
+    function createBalloon(color, left, delay) {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.left = left + 'vw';
+      balloon.style.animationDelay = delay + 's';
+      balloon.innerHTML = `<svg width="38" height="54" viewBox="0 0 38 54" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="19" cy="24" rx="18" ry="22" fill="${color}"/><rect x="17" y="44" width="4" height="10" rx="2" fill="#aaa"/></svg>`;
+      document.body.appendChild(balloon);
+      setTimeout(() => { balloon.remove(); }, 6000);
+    }
+    setInterval(() => {
+      const colors = ['#ffb6b6','#ffe6e6','#e25555','#ffd6d6'];
+      createBalloon(colors[Math.floor(Math.random()*colors.length)], Math.random()*80+5, Math.random()*3);
+    }, 1200);
+    // 解析祝福语参数
+    function getQueryParam(name) {
+      const url = new URL(window.location.href);
+      return decodeURIComponent(url.searchParams.get(name) || '亲爱的爸爸，祝您父亲节快乐，健康幸福每一天！');
+    }
+    document.getElementById('ecard-blessing').textContent = getQueryParam('blessing');
+  </script>
+</body>
+</html> 
